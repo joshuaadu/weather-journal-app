@@ -43,12 +43,15 @@ const getWeatherdata = async (url='') => {
     try {
         const weatherData = await request.json();
         console.log(weatherData);
+        return weatherData;
     }catch (error) {
         console.log('error:', error);
     }
 }
 
-postData('/postData', {3: 'Another data posted to project data'});
 getProjectData();
-getWeatherdata(baseUrl + apiKey);
+getWeatherdata(baseUrl + apiKey)
+.then((data) => {
+    postData('/postData', data);
+});
 
