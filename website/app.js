@@ -1,4 +1,6 @@
 /* Global Variables */
+const baseUrl = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=';
+const apiKey = '0dd155a7a3dc0776430b8a32c3025eab';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -34,6 +36,19 @@ const postData = async (url, data={}) => {
         console.log('error', error);
     }
 }
+
+// GET Weather data from OpenWeather
+const getWeatherdata = async (url='') => {
+    const request = await fetch(url);
+    try {
+        const weatherData = await request.json();
+        console.log(weatherData);
+    }catch (error) {
+        console.log('error:', error);
+    }
+}
+
 postData('/postData', {3: 'Another data posted to project data'});
 getProjectData();
+getWeatherdata(baseUrl + apiKey);
 
