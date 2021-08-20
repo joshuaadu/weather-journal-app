@@ -1,6 +1,17 @@
 /* Global Variables */
-const baseUrl = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=';
-const apiKey = '0dd155a7a3dc0776430b8a32c3025eab';
+/** OpenWeather base urls
+ * Forecast data:
+ *     api.openweathermap.org/data/2.5/forecast?
+ * Current weather data: https://openweathermap.org/current
+ *     api.openweathermap.org/data/2.5/weather?id={city id}&appid={API key}
+ *     api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+ *     api.openweathermap.org/data/2.5/weather?q={city name},{state code},{country code}&appid={API key}
+ *     api.openweathermap.org/data/2.5/weather?q={city name},{state code}&appid={API key}
+ */
+//  for forecast data
+const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?';
+const apiKey = '&appid=0dd155a7a3dc0776430b8a32c3025eab';
+
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -49,9 +60,25 @@ const getWeatherdata = async (url='') => {
     }
 }
 
-getProjectData();
-getWeatherdata(baseUrl + apiKey)
-.then((data) => {
-    postData('/postData', data);
-});
+/* UI Variables */
+const generateBtn = document.getElementById('generate');
+
+generateBtn.addEventListener('click', () => {
+    
+    const zip = document.getElementById('zip').value;
+    let param = '';
+
+    (Number(zip))? param = 'id=' : param = 'q=';
+
+    // Promises Chaining to get weather data
+    getWeatherdata(baseUrl + param + zip + apiKey)
+    // Then POST weather data to server
+    .then((data) => {
+        postData('/postData', data);
+    })
+    // Then GET project data from server
+    .then(getProjectData());
+})
+
+
 

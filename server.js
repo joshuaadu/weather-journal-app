@@ -33,12 +33,14 @@ const server = app.listen(port, (req, res) => {
 
 // GET route for project data
 app.get('/all', (req, res) => {
-    projectData[1] = 'first data in project data file';
     res.send(projectData);
+    console.log("Project data requested");
 })
 
 // POST route to add incoming data to projectData
 app.post('/postData', (req, res) => {
-    Object.assign(projectData, req.body);
+    // Object.assign(projectData, req.body);
+    projectData[`${req.body.name}`] = req.body;
     res.send(projectData);
+    console.log("new project data posted");
 })
