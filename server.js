@@ -40,7 +40,7 @@ app.get('/all', (req, res) => {
 // POST route to add incoming data to projectData
 app.post('/postData', (req, res) => {
     // Object.assign(projectData, req.body);
-    projectData[`${req.body.name}`] = req.body;
+    projectData[`${req.body.userCode}`] = req.body;
     res.send(projectData);
     console.log("new project data posted");
 })
