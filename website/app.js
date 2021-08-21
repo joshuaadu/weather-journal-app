@@ -9,13 +9,13 @@
  *     api.openweathermap.org/data/2.5/weather?q={city name},{state code}&appid={API key}
  */
 //  for forecast data
-const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?';
+const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=';
 const apiKey = '&appid=0dd155a7a3dc0776430b8a32c3025eab&units=metric';
 
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+let newDate = d.getMonth() + 1 + '.'+ d.getDate()+'.'+ d.getFullYear();
 
 
 // GET Project Data
@@ -55,7 +55,7 @@ const getWeatherdata = async (url='') => {
     const request = await fetch(url);
     try {
         const weatherData = await request.json();
-        // console.log(weatherData);
+        console.log(weatherData);
         return weatherData;
     }catch (error) {
         console.log('error:', error);
@@ -87,26 +87,24 @@ generateBtn.addEventListener('click', () => {
     const feelings = document.getElementById('feelings').value;
     let param = '';
 
-    (Number(zip))? param = 'id=' : param = 'q=';
-
-    // Promises Chaining to get weather data
-    getWeatherdata(baseUrl + param + zip + apiKey)
-    // Then POST weather data to server
-    .then((data) => {
-        // Create user input data object
-        let userdata = {
-            'userCode': zip,
-            'feelings': feelings,
-            'date': newDate,
-        };
-        console.log(userdata);
-        // POST weather data and user input to server
-        postData('/postData', Object.assign(data, userdata));
-        //Update UI with most recent user entry.
-        updateUI(zip);
-    })
-    
-    
+    if (zip && feelings) {
+        // Promises Chaining to get weather data
+        getWeatherdata(baseUrl + zip + apiKey)
+        // Then POST weather data to server
+        .then((data) => {
+            // Create user input data object
+            let userdata = {
+                'userCode': zip,
+                'feelings': feelings,
+                'date': newDate,
+            };
+            console.log(userdata);
+            // POST weather data and user input to server
+            postData('/postData', Object.assign(data, userdata));
+            //Update UI with most recent user entry.
+            updateUI(zip);
+        })   
+    }else alert('Please fill both fields');
 })
 
 
